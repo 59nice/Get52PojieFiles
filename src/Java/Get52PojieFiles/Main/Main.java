@@ -1,40 +1,30 @@
 package Java.Get52PojieFiles.Main;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.FileNameMap;
-import java.net.MalformedURLException;
-import java.net.URI;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import org.apache.commons.io.FileUtils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import Java.Get52PojieFiles.Tools.HttpTools;
-
 public class Main {
 
 	    
-		public static HashMap<String, String> filemap = new HashMap<>();
+	public static HashMap<String, String> filemap = new HashMap<>();
 	
 	
 	public static void main(String[] args) throws InterruptedException {
-		HttpTools httpsend = new HttpTools();
-		String result = httpsend.sendGet("https://down.52pojie.cn/list.js");
+		String result = sendGet("https://down.52pojie.cn/list.js");
 		result = result.replace("__jsonpCallbackDown52PojieCn(", "");
 		result = result.replace(");", "");
-		JsonElement Json = (JsonElement) new JsonParser().parse(result);
+		JsonElement Json =  JsonParser.parseString(result);
 		iteration_file_path(Json, "","");
 		System.out.println("下载文件将存放在本文件/download目录下，目前有" + filemap.size() + "个文件需要下载");
 		downFileByList(filemap);
@@ -71,9 +61,10 @@ public class Main {
 		}
 		return;
 	}
+		
 	/**
 	 * 下载文件到本地
-	 * @param list
+	 * @param map
 	 */
 	public static void downFileByList(HashMap<String, String> map) {
 			Iterator<Entry<String, String>> iter=map.entrySet().iterator();
@@ -123,5 +114,32 @@ public class Main {
 				.replace("&", "%26").replace("=", "%3D");
 		return str;
 	}
+	
+	/**
+	 * 发送GET请求
+	 * @param str
+	 * @return
+	 */
+    public static String sendGet(String str) {
+        try {
+            URL url = new URL(str);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true); 
+            connection.setRequestMethod("GET"); 
+            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            String line = null;
+            StringBuilder result = new StringBuilder();
+            while ((line = br.readLine()) != null) { // 读取数据
+                result.append(line + "\n");
+            }
+            connection.disconnect();
+            //System.out.println(result.toString());
+            return result.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
 }
