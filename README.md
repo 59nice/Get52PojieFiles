@@ -34,4 +34,5 @@ JRE7+
 
 ## 千山万水总是情，点个星星行不行？
 
-![img](./img/pay.png)
+
+<img src="./img/pay.png"  height="330" width="495">
