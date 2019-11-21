@@ -37,7 +37,7 @@ public class Main {
 		 * @param encodepath
 		 * @throws InterruptedException
 		 */
-		public static void iteration_file_path(JsonElement path, String parentpath,String encodepath) throws InterruptedException {
+	public static void iteration_file_path(JsonElement path, String parentpath,String encodepath) throws InterruptedException {
 		try {
 			if (path.isJsonArray()) {
 				for (int i = 0; i < path.getAsJsonArray().size(); i++) {
