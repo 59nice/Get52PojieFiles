@@ -7,7 +7,7 @@
 
 ![img](./img/img.png)
 
-压缩包解压密码：www.52pojie.cn
+下载完成后部分压缩包解压密码：www.52pojie.cn
 
 
 ### 运行环境
